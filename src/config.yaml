@@ -1,0 +1,12 @@
+sources:
+  - "https://habr.com/ru/rss/hub/python/"
+  - "https://journal.neurips.cc/rss"
+  - "https://www.nature.com/subjects/computer-science.rss"
+  - "https://javarush.com/rss"
+  - "https://www.baeldung.com/rss"
+  - "https://www.infoq.com/feed/?language=ru&category=java"
+anchor_text: >
+  java
+top_n: 5
+threshold: 0.15
+language: russian
