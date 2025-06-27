@@ -17,10 +17,10 @@ class EnhancedRecommendationEngine(RecommendationEngine):
     def recommend(self, articles: list[dict[str, Any]], top_n: int = 5) -> list[dict[str, Any]]:
         similarities = np.array(linear_kernel(self.anchor_vector, self.article_vectors)[0])
         
-        # Нормализация к диапазону [0, 1]
-        similarities = (similarities - similarities.min()) /  (similarities.max() - similarities.min())
+        # Normalization
+        similarities = (similarities - similarities.min()) / (similarities.max() - similarities.min() + 1e-8)
         
-        print(f"Статистика схожести: Max={max(similarities):.2f}, Min={min(similarities):.2f}, Avg={sum(similarities)/len(similarities):.2f}")
+        print(f"Similarity statistics: Max={max(similarities):.2f}, Min={min(similarities):.2f}, Avg={sum(similarities)/len(similarities):.2f}")
         
         sorted_indices = similarities.argsort()[::-1]
         recommendations = [{

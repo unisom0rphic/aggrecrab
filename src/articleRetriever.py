@@ -4,7 +4,7 @@ from typing import Any
 class ArticleRetriever:
     @staticmethod
     def fetch_articles(rss_urls: list[str]) -> list[dict[str, Any]]:
-        """Загрузка статей из RSS-лент"""
+        """Fetching articles from RSS feeds"""
         articles = []
         for url in rss_urls:
             feed = feedparser.parse(url)

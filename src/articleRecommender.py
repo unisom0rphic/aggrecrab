@@ -18,17 +18,17 @@ class ArticleRecommender:
             return yaml.safe_load(f)
 
     def run(self) -> list[dict[str, Any]]:
-        """Запуск пайплайна рекомендаций"""
-        # Загрузка и предобработка опорного текста
+        """Recommendations pipeline"""
+        # Downloading and preprocessing
         anchor_text = self.preprocessor.preprocess(self.config['anchor_text'])
         
-        # Получение статей
+        # Retrieving articles
         articles = self.retriever.fetch_articles(self.config['sources'])
         
-        # Предобработка контента статей
+        # Preprocessing articles text
         for art in articles:
             art['processed_content'] = self.preprocessor.preprocess(art['content'])
         
-        # Обучение и получение рекомендаций
+        # Training and receiving recommendations
         self.engine.train(anchor_text, articles)
         return self.engine.recommend(articles, top_n=self.config.get('top_n', 5))
