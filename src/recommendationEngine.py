@@ -3,10 +3,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from typing import Any
 
 class RecommendationEngine:
-    def __init__(self, vectorizer=None):
+    def __init__(self, vectorizer=None, model=None):
         self.vectorizer = vectorizer or TfidfVectorizer()
         self.anchor_vector = None
 
+    # TODO: word2vec instead of TF-IDF
+    # Use either cosine similarity/k-means/dbscan for recommendations
     def train(self, anchor_text: str, articles: list[dict[str, Any]]):
         """Training the model on given anchor text and articles"""
         # Creating a single corpus from existing articles
