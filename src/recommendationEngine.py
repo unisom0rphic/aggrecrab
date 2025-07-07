@@ -1,4 +1,4 @@
-from sklearn.metrics.pairwise import linear_kernel
+from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 from typing import Any
 
@@ -8,7 +8,6 @@ class RecommendationEngine:
         self.anchor_vector = None
 
     # TODO: word2vec instead of TF-IDF
-    # Use either cosine similarity/k-means/dbscan for recommendations
     def train(self, anchor_text: str, articles: list[dict[str, Any]]):
         """Training the model on given anchor text and articles"""
         # Creating a single corpus from existing articles
@@ -23,7 +22,7 @@ class RecommendationEngine:
 
     def recommend(self, articles: list[dict[str, Any]], top_n: int = 5) -> list[dict[str, Any]]:
         """Organizes articles by rating"""
-        similarities = linear_kernel(self.anchor_vector, self.article_vectors)[0]
+        similarities = cosine_similarity(self.anchor_vector, self.article_vectors)[0]
         
         sorted_indices = similarities.argsort()[::-1]
         recommendations = []
