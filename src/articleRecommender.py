@@ -23,7 +23,7 @@ class ArticleRecommender:
         anchor_text = self.preprocessor.preprocess(self.config['anchor_text'])
         
         # Retrieving articles
-        articles = self.retriever.fetch_articles(self.config['sources'])
+        articles = self.retriever.fetch_all_feeds(self.config['sources'])
         
         # Preprocessing articles text
         for art in articles:
