@@ -18,7 +18,7 @@ class ArticleRetriever:
 
     @staticmethod
     def _fetch_feed(url) -> list:
-        """Fetches one article"""
+        """Fetches one specific feed to allow multithreading"""
         feed_articles = []
         feed = feedparser.parse(url)
         for entry in feed.entries:
