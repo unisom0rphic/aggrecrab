@@ -14,7 +14,9 @@ def run(request: str):
             st.write(f"   Reference: {art['url']}")
             st.write()
         
+        # FIXME: rendering issues
         if st.button("Clear Results"):
+            st.session_state.clear()
             st.rerun()
 
 if __name__ == '__main__':
@@ -22,6 +24,11 @@ if __name__ == '__main__':
     
     with placeholder.container():
         st.markdown("# Aggrecrab ©")
-        req = st.text_input(label="Enter request:", placeholder="Input your request...", max_chars=255)
+        req = st.text_input(
+            label="Enter request:", 
+            placeholder="Input your request...", 
+            max_chars=255,
+            key="request"
+        )
         if req:
             run(req)
