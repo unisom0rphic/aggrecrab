@@ -1,12 +1,13 @@
 import yaml
-from typing import Any
+from typing import Any, Optional
 
 from textPreprocessor import TextPreprocessor
 from articleRetriever import ArticleRetriever
 from enhancedRecommendEngine import EnhancedRecommendationEngine
 
 class ArticleRecommender:
-    def __init__(self, config_path: str):
+    def __init__(self, request: str, config_path: str="config.yaml"):
+        self.request = request
         self.config = self._load_config(config_path)
         self.preprocessor = TextPreprocessor()
         self.retriever = ArticleRetriever()
@@ -20,7 +21,7 @@ class ArticleRecommender:
     def run(self) -> list[dict[str, Any]]:
         """Recommendations pipeline"""
         # Downloading and preprocessing
-        anchor_text = self.preprocessor.preprocess(self.config['anchor_text'])
+        anchor_text = self.request or self.preprocessor.preprocess(self.config['anchor_text'])
         
         # Retrieving articles
         articles = self.retriever.fetch_all_feeds(self.config['sources'])

@@ -1,9 +1,9 @@
 import streamlit as st
 from articleRecommender import ArticleRecommender
 
-def run():
+def run(request: str):
     """Run recommendations and manage UI state."""
-    recommender = ArticleRecommender("config.yaml")
+    recommender = ArticleRecommender(request)
     with st.spinner("Finding good articles..."):
         results = recommender.run()
     
@@ -14,15 +14,14 @@ def run():
             st.write(f"   Reference: {art['url']}")
             st.write()
         
-        # Replace the button inside the results
         if st.button("Clear Results"):
-            st.rerun()  # Force-refresh to reset
+            st.rerun()
 
 if __name__ == '__main__':
     placeholder = st.empty()
     
-    # Initial screen (only shown if no results)
     with placeholder.container():
         st.markdown("# Aggrecrab ©")
-        if st.button("RUN"):
-            run()  # Generate results
+        req = st.text_input(label="Enter request:", placeholder="Input your request...", max_chars=255)
+        if req:
+            run(req)
