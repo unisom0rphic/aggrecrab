@@ -11,7 +11,7 @@ class ArticleRetriever:
         """Fetching articles from RSS feeds"""
         feed_articles = []
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            # Contains articles from different feeds separately
+            # Contains articles from different feeds as separate lists
             feed_articles = list(executor.map(ArticleRetriever._fetch_feed, rss_urls))  
         # Flattens the list to get all articles without feed separation
         return [art for feed in feed_articles for art in feed]
