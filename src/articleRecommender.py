@@ -47,7 +47,7 @@ class ArticleRecommender:
             articles = self.retriever.fetch_all_feeds(self.config['sources'])
             logger.info("Successfully retrieved articles for recommendation engine")
         except RSSFetchError as e:
-            logger.error(f"RSS-fetching failed: {str(e)}")
+            logger.error("RSS-fetching failed: %s", str(e))
             raise 
         
         # Preprocessing articles text

@@ -21,7 +21,9 @@ class ArticleRetriever:
             with concurrent.futures.ThreadPoolExecutor() as executor:
                 # Contains articles from different feeds as separate lists
                 feeds_articles = list(executor.map(ArticleRetriever._fetch_feed, rss_urls))  
-            logger.info("Successfully fetched %d feeds", len(feeds_articles))
+                logger.info("Successfully processed %d feeds containing %d total articles", 
+                    len(feeds_articles),
+                    sum(len(feed) for feed in feeds_articles))
         except concurrent.futures.TimeoutError as e:
             logger.error("concurrent.futures timeout!\nRSS URLs: %s", rss_urls, exc_info=True)
             raise RSSFetchError(f"Unable to fetch RSS URLs: {str(e)}") from e
@@ -33,10 +35,11 @@ class ArticleRetriever:
     def _fetch_feed(url) -> list:
         """Fetches one specific feed to allow multithreading"""
         feed_articles = []
+        logger.debug("Fetching feed from %s", url)
 
         try:
-            logger.debug("Fetching feed from %s", url)
             feed = feedparser.parse(url)
+            logger.info("Successfully fetched source: %s", url)
             for entry in feed.entries:
                 content = getattr(entry, 'description', '') or getattr(entry, 'summary', '')
                 feed_articles.append({
