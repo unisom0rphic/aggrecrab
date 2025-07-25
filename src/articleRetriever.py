@@ -7,24 +7,27 @@ from datetime import timedelta
 import logging
 logger = logging.getLogger(__name__)
 
+class RSSFetchError(Exception):
+    pass
+
 class ArticleRetriever:
     @staticmethod
     @st.cache_data(ttl=timedelta(minutes=30))
     def fetch_all_feeds(rss_urls: list[str]) -> list:
         """Fetching articles from RSS feeds"""
-        feed_articles = []
+        feeds_articles = []
         try:
             logger.info("Loading RSS feeds from: %s", rss_urls)
             with concurrent.futures.ThreadPoolExecutor() as executor:
                 # Contains articles from different feeds as separate lists
-                logger.debug("Successfully created ThreadPoolExecutor: %s", executor)
-                feed_articles = list(executor.map(ArticleRetriever._fetch_feed, rss_urls))  
-        except Exception as e:
-            logger.error("concurrent.futures error!\nRSS URLs: %s", rss_urls)
-            raise ValueError(f"Unable to fetch RSS URLs: {str(e)}") from e
+                feeds_articles = list(executor.map(ArticleRetriever._fetch_feed, rss_urls))  
+            logger.info("Successfully fetched %d feeds", len(feeds_articles))
+        except concurrent.futures.TimeoutError as e:
+            logger.error("concurrent.futures timeout!\nRSS URLs: %s", rss_urls, exc_info=True)
+            raise RSSFetchError(f"Unable to fetch RSS URLs: {str(e)}") from e
 
         # Flattens the list to get all articles without feed separation
-        return [art for feed in feed_articles for art in feed]
+        return [art for feed in feeds_articles for art in feed]
 
     @staticmethod
     def _fetch_feed(url) -> list:
@@ -44,5 +47,5 @@ class ArticleRetriever:
                 })
             return feed_articles
         except Exception as e:
-            logger.error("Parsing error at %s", url)
-            raise ValueError(f"Parsing error at {url}: {str(e)}") from e
+            logger.error("Parsing error at %s", url, exc_info=True)
+            raise RSSFetchError(f"Parsing error at {url}: {str(e)}") from e

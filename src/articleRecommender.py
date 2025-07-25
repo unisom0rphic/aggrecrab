@@ -2,7 +2,7 @@ import yaml
 from typing import Any, Optional
 
 from textPreprocessor import TextPreprocessor
-from articleRetriever import ArticleRetriever
+from articleRetriever import ArticleRetriever, RSSFetchError
 from enhancedRecommendEngine import EnhancedRecommendationEngine
 
 import logging
@@ -19,7 +19,6 @@ class ArticleRecommender:
     @staticmethod
     def _load_config(path: str) -> dict:
         try:
-            logger.debug("Loading config from: %s", path)
             with open(path, 'r') as f:
                 config = yaml.safe_load(f)
             logger.info("Successfully loaded config from: %s", path)
@@ -44,11 +43,12 @@ class ArticleRecommender:
 
         
         # Retrieving articles
-        # TODO
         try:
             articles = self.retriever.fetch_all_feeds(self.config['sources'])
-        except:
-            raise
+            logger.info("Successfully retrieved articles for recommendation engine")
+        except RSSFetchError as e:
+            logger.error(f"RSS-fetching failed: {str(e)}")
+            raise 
         
         # Preprocessing articles text
         for art in articles:
