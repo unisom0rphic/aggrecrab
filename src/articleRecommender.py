@@ -35,10 +35,20 @@ class ArticleRecommender:
     def run(self) -> list[dict[str, Any]]:
         """Recommendations pipeline"""
         # Downloading and preprocessing
-        anchor_text = self.request or self.preprocessor.preprocess(self.config['anchor_text'])
+        try:
+            logger.debug("Loading anchor text. Request: %s", self.request)
+            anchor_text = self.request
+        except Exception:
+            logger.error("Invalid anchor-text: %s", self.request, exc_info=True)
+            raise
+
         
         # Retrieving articles
-        articles = self.retriever.fetch_all_feeds(self.config['sources'])
+        # TODO
+        try:
+            articles = self.retriever.fetch_all_feeds(self.config['sources'])
+        except:
+            raise
         
         # Preprocessing articles text
         for art in articles:
