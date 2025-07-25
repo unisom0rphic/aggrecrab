@@ -5,6 +5,9 @@ from textPreprocessor import TextPreprocessor
 from articleRetriever import ArticleRetriever
 from enhancedRecommendEngine import EnhancedRecommendationEngine
 
+import logging
+logger = logging.getLogger(__name__)
+
 class ArticleRecommender:
     def __init__(self, request: str, config_path: str="config.yaml"):
         self.request = request
@@ -15,8 +18,19 @@ class ArticleRecommender:
 
     @staticmethod
     def _load_config(path: str) -> dict:
-        with open(path, 'r') as f:
-            return yaml.safe_load(f)
+        try:
+            logger.debug("Loading config from: %s", path)
+            with open(path, 'r') as f:
+                config = yaml.safe_load(f)
+            logger.info("Successfully loaded config from: %s", path)
+            return config
+        except FileNotFoundError:
+            logger.error("Config file not found: %s", path, exc_info=True)
+            raise
+        except yaml.YAMLError as e:
+            logger.error("Invalid YAML in config file: %s", path, exc_info=True)
+            raise ValueError(f"Invalid YAML in {path}") from e
+
 
     def run(self) -> list[dict[str, Any]]:
         """Recommendations pipeline"""
