@@ -39,6 +39,8 @@ language: english # Actually shouldn't work on anything else
 ```
 
 ## 💻 Installation guide (Untested though, pray it works🙏)
+### Windows
+### Windows
 ```powershell
 git clone https://https://github.com/unisom0rphic/aggrecrab
 cd aggrecrab
