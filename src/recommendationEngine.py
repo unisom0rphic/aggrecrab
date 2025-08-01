@@ -1,5 +1,9 @@
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
+
+import logging
+logger = logging.getLogger(__name__)
+
 from typing import Any
 
 class RecommendationEngine:
@@ -14,7 +18,11 @@ class RecommendationEngine:
         corpus = [anchor_text] + [art['content'] for art in articles]
         
         # Vectorization
-        tfidf_matrix = self.vectorizer.fit_transform(corpus)
+        try:
+            tfidf_matrix = self.vectorizer.fit_transform(corpus)
+        except ValueError as e:
+            logger.error("Corpus can't be vectorized: %s", str(e), exc_info=True)
+            raise ValueError(f"Corpus can't be vectorized: {str(e)}") from e
         
         # Saving anchor vector
         self.anchor_vector = tfidf_matrix[0]

@@ -34,12 +34,8 @@ class ArticleRecommender:
     def run(self) -> list[dict[str, Any]]:
         """Recommendations pipeline"""
         # Downloading and preprocessing
-        try:
-            logger.debug("Loading anchor text. Request: %s", self.request)
-            anchor_text = self.request
-        except Exception:
-            logger.error("Invalid anchor-text: %s", self.request, exc_info=True)
-            raise
+        logger.debug("Loading anchor text. Request: %s", self.request)
+        anchor_text = self.request
 
         
         # Retrieving articles

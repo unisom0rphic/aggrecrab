@@ -16,6 +16,11 @@ class ArticleRetriever:
     def fetch_all_feeds(rss_urls: list[str]) -> list:
         """Fetching articles from RSS feeds"""
         feeds_articles = []
+
+        if not rss_urls:
+            logger.warning("RSS URLs is empty")
+            return []
+
         try:
             logger.info("Loading RSS feeds from: %s", rss_urls)
             with concurrent.futures.ThreadPoolExecutor() as executor:
