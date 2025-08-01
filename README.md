@@ -1,5 +1,5 @@
 # Aggrecrab 🦀
-A news aggregation tool (*who reads newspapers in 2025 though?*)
+A newspaper aggregation tool (*who reads newspapers in 2025 though?*)
 
 ## 📝 Overview
 ![demo](./assets/demo.gif)  
@@ -12,16 +12,17 @@ A news aggregation tool (*who reads newspapers in 2025 though?*)
 
 ## 🤖 Recommendation system
 ### Current implementation:
-1. Fetches RSS-feeds from custom `config.yaml` 
+1. Fetches RSS-feeds from custom `config.yaml`  
 🚩Always check `robots.txt` and Terms of Service
-2. Asks the user for a request (so-called *"anchor text"*)
-3. Creates a **TF-IDF** matrix for both *anchor text* and *fetched articles*
-4. Finds similarities using scikit\`s `linear_kernel()`
-5. Ranks the articles
-6. **Shows results!**
+3. Asks the user for a request (so-called *"anchor text"*)
+4. Creates a **TF-IDF** matrix for both *anchor text* and *fetched articles*
+5. Finds similarities using scikit\`s `linear_kernel()`
+6. Ranks the articles
+7. **Shows results!**
 
 ## 🔮 Future plans
 - Automatic finding of appropriate RSS-feeds (with `robots.txt` check!)
+- Dockerization
 - Cool UI/UX
 
 ## ✏️ Example `config.yaml`
@@ -40,7 +41,6 @@ language: english # Actually shouldn't work on anything else
 
 ## 💻 Installation guide (Untested though, pray it works🙏)
 ### Windows
-### Windows
 ```powershell
 git clone https://https://github.com/unisom0rphic/aggrecrab
 cd aggrecrab
@@ -49,9 +49,11 @@ cd src
 pip install -r requirements.txt  # Hopefully no conflicts...
 streamlit run main.py  # Keep in mind you need config.yaml in /src/ folder, you can copy example
 ```
+### Linux
+WIP
 
 ## 🎉 Contributing
-**PRs welcome!**
+**PRs welcome! Make sure to follow CONTRIBUTING.md**
 
 ## 📜 License
 *Aggrecrab* is distributed under the MIT License, meaning you are technically free to steal the project
