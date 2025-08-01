@@ -16,8 +16,8 @@ class RecommendationError(Exception):
 def run(request: str):
     """Run recommendations and manage UI state"""
     recommender = ArticleRecommender(request)
+    logger.info("Started recommendation search")
     with st.spinner("Finding good articles..."):
-        logger.info("Started recommendation search")
         try:
             results = recommender.run()
         except RSSFetchError as e:
