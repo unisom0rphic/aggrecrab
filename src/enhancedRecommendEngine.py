@@ -3,6 +3,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from typing import Any
 
+import logging
+logger = logging.getLogger(__name__)
+
 from recommendationEngine import RecommendationEngine
 
 class EnhancedRecommendationEngine(RecommendationEngine):
@@ -18,9 +21,16 @@ class EnhancedRecommendationEngine(RecommendationEngine):
         similarities = np.array(linear_kernel(self.anchor_vector, self.article_vectors)[0])
         
         # Normalization
+        # 1e-8 = 10^(-8) to avoid division by zero
         similarities = (similarities - similarities.min()) / (similarities.max() - similarities.min() + 1e-8)
         
-        print(f"Similarity statistics: Max={max(similarities):.2f}, Min={min(similarities):.2f}, Avg={sum(similarities)/len(similarities):.2f}")
+        logger.info(
+            "Similarity statistics: Max=%.2f, Min=%.2f, Avg=%.2f",
+            max(similarities),
+            min(similarities),
+            sum(similarities)/len(similarities)
+        )
+        
         
         sorted_indices = similarities.argsort()[::-1]
         recommendations = [{

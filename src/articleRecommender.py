@@ -2,8 +2,11 @@ import yaml
 from typing import Any, Optional
 
 from textPreprocessor import TextPreprocessor
-from articleRetriever import ArticleRetriever
+from articleRetriever import ArticleRetriever, RSSFetchError
 from enhancedRecommendEngine import EnhancedRecommendationEngine
+
+import logging
+logger = logging.getLogger(__name__)
 
 class ArticleRecommender:
     def __init__(self, request: str, config_path: str="config.yaml"):
@@ -15,16 +18,33 @@ class ArticleRecommender:
 
     @staticmethod
     def _load_config(path: str) -> dict:
-        with open(path, 'r') as f:
-            return yaml.safe_load(f)
+        try:
+            with open(path, 'r') as f:
+                config = yaml.safe_load(f)
+            logger.info("Successfully loaded config from: %s", path)
+            return config
+        except FileNotFoundError:
+            logger.error("Config file not found: %s", path, exc_info=True)
+            raise
+        except yaml.YAMLError as e:
+            logger.error("Invalid YAML in config file: %s", path, exc_info=True)
+            raise ValueError(f"Invalid YAML in {path}") from e
+
 
     def run(self) -> list[dict[str, Any]]:
         """Recommendations pipeline"""
         # Downloading and preprocessing
-        anchor_text = self.request or self.preprocessor.preprocess(self.config['anchor_text'])
+        logger.debug("Loading anchor text. Request: %s", self.request)
+        anchor_text = self.request
+
         
         # Retrieving articles
-        articles = self.retriever.fetch_all_feeds(self.config['sources'])
+        try:
+            articles = self.retriever.fetch_all_feeds(self.config['sources'])
+            logger.info("Successfully retrieved articles for recommendation engine")
+        except RSSFetchError as e:
+            logger.error("RSS-fetching failed: %s", str(e))
+            raise 
         
         # Preprocessing articles text
         for art in articles:
