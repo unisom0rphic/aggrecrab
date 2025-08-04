@@ -42,23 +42,32 @@ language: english # Actually shouldn't work on anything else
 ## 💻 Installation guide
 ### Local
 ```bash
-git clone https://github.com/unisom0rphic/aggrecrab
-cd aggrecrab
+# 1. Clone repo  
+git clone https://github.com/unisom0rphic/aggrecrab  
+cd aggrecrab  
 
-# Create virtual environment
+# 2. Create virtual environment
 python -m venv .venv  # Python 3.11 recommended
 # If you have multiple python instances, 
 # you may want to try
-py -3.11 -m venv .venv  # Windows
-python3.11 -m venv .venv # Linux
+# Windows  
+py -3.11 -m venv .venv
+# Linux  
+python3.11 -m venv .venv  
 
-# Activate venv
-.venv\Scripts\Activate  # Windows
-source .venv/scripts/activate  # Linux
+# 3. Activate venv
+# Windows  
+.venv\Scripts\Activate  
+# Linux  
+source .venv/bin/activate  
 
+# 4. Install dependencies
 cd src
+python -m pip install --upgrade pip
 pip install -r requirements.txt  # Hopefully no conflicts...
-streamlit run main.py  # Keep in mind you need config.yaml in /src/ folder, you can copy example
+
+# 5. Run the app
+streamlit run main.py
 ```
 ### Docker image
 **WIP**
