@@ -39,18 +39,29 @@ top_n: 5  # How many articles to show?
 language: english # Actually shouldn't work on anything else
 ```
 
-## 💻 Installation guide (Untested though, pray it works🙏)
-### Windows
-```powershell
-git clone https://https://github.com/unisom0rphic/aggrecrab
+## 💻 Installation guide
+### Local
+```bash
+git clone https://github.com/unisom0rphic/aggrecrab
 cd aggrecrab
-python -m venv .  # Python 3.11 recommended
+
+# Create virtual environment
+python -m venv .venv  # Python 3.11 recommended
+# If you have multiple python instances, 
+# you may want to try
+py -3.11 -m venv .venv  # Windows
+python3.11 -m venv .venv # Linux
+
+# Activate venv
+.venv\Scripts\Activate  # Windows
+source .venv/scripts/activate  # Linux
+
 cd src
 pip install -r requirements.txt  # Hopefully no conflicts...
 streamlit run main.py  # Keep in mind you need config.yaml in /src/ folder, you can copy example
 ```
-### Linux
-WIP
+### Docker image
+**WIP**
 
 ## 🎉 Contributing
 **PRs welcome! Make sure to follow CONTRIBUTING.md**
