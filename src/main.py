@@ -1,10 +1,15 @@
 import streamlit as st
 
 import logging
+from logging.handlers import RotatingFileHandler
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[logging.FileHandler("main.log")]
+    handlers=[RotatingFileHandler(
+        "app.log",
+        maxBytes=10240,
+        backupCount=2,
+    )]
 )
 logger = logging.getLogger(__name__)
 
