@@ -3,9 +3,24 @@ import streamlit as st
 import concurrent.futures
 from typing import Any
 from datetime import timedelta
+from urllib.robotparser import RobotFileParser
 
 import logging
 logger = logging.getLogger(__name__)
+
+def check_robots_txt(url: str, useragent="*") -> bool:
+    """Check whether url is allowed by robots.txt"""
+    rp = RobotFileParser()
+    robots_url = f"{url.rstrip('/')}/robots.txt"
+    logger.debug("robots.txt check at %s", robots_url)
+    rp.set_url(robots_url)
+
+    try:
+        rp.read()
+        return rp.can_fetch(useragent, url)
+    except Exception as e:
+        logger.error(f"Parsing robots.txt failed: %s", str(e), exc_info=True)
+        return False 
 
 class RSSFetchError(Exception):
     pass
@@ -44,6 +59,9 @@ class ArticleRetriever:
 
         try:
             feed = feedparser.parse(url)
+            if not check_robots_txt(url):
+                logger.warning("Fetching is not allowed by robots.txt (%s)", url)
+                return []
             logger.info("Successfully fetched source: %s", url)
             for entry in feed.entries:
                 content = getattr(entry, 'description', '') or getattr(entry, 'summary', '')
